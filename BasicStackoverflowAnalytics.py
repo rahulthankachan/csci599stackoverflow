@@ -1,37 +1,39 @@
 import xml.etree.ElementTree as XMLParser
 
-
 TagsCountDictionary = dict()
 
+for event, elem in XMLParser.iterparse('stackoverflow\stackoverflow.com-Posts\Posts.xml'):
+    tags = elem.get('Tags')
+    if tags:
+        tags = tags.replace('<',' ')
+        tags = tags.replace('>',' ')
+        tags = tags.split()
+        for item in tags:
+            if item in TagsCountDictionary.keys():
+                TagsCountDictionary[item] = TagsCountDictionary[item] + 1
+            else:
+                TagsCountDictionary[item] = 1
 
-XMLTagsDoc = XMLParser.parse('stackoverflow\stackoverflow.com-Tags\Tags.xml').getroot()
-
-TagsRows = XMLTagsDoc.findall('row')
-
-for row in TagsRows:
-    if row.get('TagName') == ".net":
-        if "ASP.NET" in TagsCountDictionary.keys():
-            TagsCountDictionary["ASP.NET"] = TagsCountDictionary["ASP.NET"] + int(row.get('Count'))
-        else:
-            TagsCountDictionary["ASP.NET"] = int(row.get('Count'))
-
-    if row.get('TagName') == "asp.net":
-        if "ASP.NET" in TagsCountDictionary.keys():
-            TagsCountDictionary["ASP.NET"] = TagsCountDictionary["ASP.NET"] + int(row.get('Count'))
-        else:
-            TagsCountDictionary["asp.net"] = int(row.get('Count'))
-
-    TagsCountDictionary[row.get('TagName')] = int(row.get('Count'))
+    elem.clear()
 
 
 TagsCountDictionary_sorted_list = sorted(TagsCountDictionary.items(), key=lambda x:x[1],reverse=True)
-#print(TagsCountDictionary_sorted_list)
+fp = open('TagsCountDictionary_sorted_list.txt','w')
+fp.write(str(TagsCountDictionary_sorted_list))
 
-count = 1
+count = 0
+TopTenLanguagesDict = dict()
 for item in TagsCountDictionary_sorted_list:
-    print(item)
-    count = count + 1
-    if count == 11:
+    count=count+1
+    TopTenLanguagesDict[item[0]] = item[1]
+    if count==10:
         break
+
+print("Top Ten Programming languages::")
+print(TopTenLanguagesDict)
+
+
+
+
 
 
