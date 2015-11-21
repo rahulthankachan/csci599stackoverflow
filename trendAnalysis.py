@@ -11,30 +11,21 @@
 from datetime import datetime
 import statistics
 
-# Keep min and max dates
-#minDate = '9999'
-#maxDate = '0000'
-
 
 # Compute the trend of the language based on the post count
-# Return a dictionary: {'YYMM': count}
+# Return a list of post counts per month over the years 08 to 15
 def countTrend(ipfile):
-    #global minDate
-    #global maxDate
-    trend = dict()
+    trend = [0 for i in range(0,8*12)]
     with open(ipfile,"r") as ipfile:
         for line in ipfile:
-            postDate = datetime.strptime(eval(line)[4], "%Y-%m-%dT%H:%M:%S.%f")
-            key = str(postDate.year)[2:]+'{:02d}'.format(postDate.month)
-            trend[key] = trend.get(key,0)+1
-            #if key < minDate: minDate=key
-            #if key > maxDate: maxDate=key
+            postDate = datetime.strptime(eval(line)['CreationDate'], "%Y-%m-%dT%H:%M:%S.%f")
+            index = ((int(str(postDate.year)[2:])-8)*12) + (postDate.month-1)
+            trend[index] += 1
     return trend
 
 
 if __name__ == '__main__':
     popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
-
     # Keep a dictionary of trends
     allTrends = dict()
     # Count Trends
@@ -43,6 +34,3 @@ if __name__ == '__main__':
             trend = countTrend("Resources/Questions/"+lang+".txt")
             opfile.write(lang+' '+str(trend)+'\n')
             allTrends.update({lang:trend})
-
-#    print("minDate= " + minDate)
-#    print("maxDate= " + maxDate)
