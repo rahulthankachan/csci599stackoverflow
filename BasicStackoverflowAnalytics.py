@@ -3,7 +3,7 @@ import xml.etree.ElementTree as XMLParser
 
 def create_TagList_ProgrammingLanguage():
     TagsCountDictionary = dict()
-    for event, elem in XMLParser.iterparse('resourses\stackoverflow\stackoverflow.com-Posts\Posts.xml'):
+    for event, elem in XMLParser.iterparse('Resources\Posts.xml'):
         tags = elem.get('Tags')
         if tags:
             tags = tags.replace('<',' ')
@@ -64,7 +64,7 @@ def Calculate_Questions_Post_List():
     fp.close()
 
     fp = open('Output/Questions_Post_Dictionary.txt','w')
-    for event, elem in XMLParser.iterparse('resourses\stackoverflow\stackoverflow.com-Posts\Posts.xml'):
+    for event, elem in XMLParser.iterparse('Resources\Posts.xml'):
         if elem.get('PostTypeId') == "1":
             templist = list()
             tags = elem.get('Tags')
@@ -85,74 +85,37 @@ def Calculate_Questions_Post_List():
 
     fp.close()
 
-def Calculate_Questionaries_Per_Language_List():
+def Calculate_Questioner_Per_Language_List():
 
-    Questionaries_Per_Language = dict()
-    Number_Of_Questionaries_Per_Language = dict()
-    fp = open('Output/Questions_Post_Dictionary.txt','r')
-
-    for line in fp:
-        tempList = eval(line.rstrip('\n'))
-        if len(tempList[0])>0:
-            for item in tempList[0]:
-                if item in Questionaries_Per_Language.keys():
-                    if(tempList[1] not in Questionaries_Per_Language[item]):
-                        Questionaries_Per_Language[item].append(tempList[1])
-                else:
-                    Questionaries_Per_Language[item] = list()
-                    Questionaries_Per_Language[item].append(tempList[1])
-
+    fp = open('Output/TopTenProgrammingLanguages_sorted_list.txt','r')
+    ProgrammingLanguages_list = eval(fp.read())
     fp.close()
 
-    fp = open('Output/Questionaries_Per_Language_Dict.txt','w')
-    fp.write(str(Questionaries_Per_Language))
-    fp.close()
+    Data_Per_Language = dict()
 
-    for item in Questionaries_Per_Language.keys():
-        Number_Of_Questionaries_Per_Language[item] = len(Questionaries_Per_Language[item])
+    for item in ProgrammingLanguages_list:
+        Number_of_questions = 0
+        Data_Per_Language[item[0]] = dict()
+        fp = open('Resources/Questions/' + item[0] +'.txt','r')
+        tempQuestionerList = list()
+        for line in fp:
+            tempDict= eval(line.rstrip('\n'))
+            if tempDict['OwnerUserId']:
+                if int(tempDict['OwnerUserId']) not in tempQuestionerList:
+                    tempQuestionerList.append(int(tempDict['OwnerUserId']))
 
-    return Number_Of_Questionaries_Per_Language
+            Number_of_questions = Number_of_questions + 1
+
+        Data_Per_Language[item[0]]["QuestionsCount"] = Number_of_questions
+        Data_Per_Language[item[0]]["QuestionerCount"] = len(tempQuestionerList)
+        Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
+
+    print(Data_Per_Language)
 
 
-# print("Top Ten Programming languages::")
-# print(Calculate_Questionaries_Per_Language_List())
 
-# QuestionCount = 0
-# AnswerCount = 0
-# TotalPosts=0
-#
-# for event, elem in XMLParser.iterparse('resourses\stackoverflow\stackoverflow.com-Posts\Posts.xml'):
-#     if elem.get('PostTypeId') == "1":
-#         QuestionCount = QuestionCount +1
-#     if elem.get('PostTypeId') == "2":
-#         AnswerCount = AnswerCount +1
-#
-#     TotalPosts = TotalPosts + 1
-#     elem.clear()
-#
-# print("Question Count::"+str(QuestionCount))
-# print("Answer Count::"+str(AnswerCount))
-# print("Total Posts::"+str(TotalPosts))
+Calculate_Questioner_Per_Language_List()
 
-fp = open('Output/TagsCountDictionary_sorted_list.txt','r')
-TagsCountDictionary_sorted_list = eval(fp.read())
-fp.close()
-
-Tags =list()
-
-for item in TagsCountDictionary_sorted_list:
-    Tags.append(item[0])
-
-fp = open('Output/ListProgrammingLanguagesFinal2.txt','r')
-PL_list = eval(fp.read())
-fp.close()
-
-IntersectionList = set(PL_list) & set (Tags)
-print(IntersectionList)
-print("Intersection::"+str(len(PL_list)))
-# fp = open('Output/TopTenLanguagesNumberOfQuestionsDict.txt','w')
-# fp.write(str(TopTenLanguagesNumberOfQuestionsDict))
-# fp.close()
 
 
 
