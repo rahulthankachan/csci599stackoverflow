@@ -109,6 +109,7 @@ def Calculate_Questioner_Per_Language_List():
         Data_Per_Language[item[0]]["QuestionsCount"] = Number_of_questions
         Data_Per_Language[item[0]]["QuestionerCount"] = len(tempQuestionerList)
         Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
+        fp.close()
 
     print(Data_Per_Language)
 
