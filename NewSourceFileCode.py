@@ -1,14 +1,12 @@
 import xml.etree.ElementTree as XMLParser
 import json
 
-popular_languages = {"javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c"}
+popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
 
 # This function is used to create proper Questions data file
+
+
 def create_subset_files():
-
-    # fileq.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
-    # fileq.write("\n<questions>")
-
     count = 0
     for event, elem in XMLParser.iterparse('Resources/Posts.xml'):
         tags = elem.get('Tags')
@@ -17,7 +15,6 @@ def create_subset_files():
             tags = tags.replace(">", " ")
             tags = tags[1:-1]
             mdict = tags.split(" ")
-            #print(mdict)
             for key in mdict:
                 if key in popular_languages:
                     dict_tuple_post = {"Id": elem.get("Id"),
@@ -46,6 +43,7 @@ def create_subset_files():
                     fileq = open("Resources/Questions/"+"allquestions.txt", "a")
                     fileq.write(str(tuple_all_questions)+"\n")
                     fileq.close()
+                    break
         # count += 1
         # if count > 20:
         #     break
@@ -111,11 +109,16 @@ def create_subset_files_ans():
         # count += 1
         # if count > 20:
         #     break
-    x = 0
-    print("Done %s" )
+
+    print("Done")
 
 
 ########### Implementation #############
 
-create_subset_files()
-create_subset_files_ans()
+# create_subset_files()
+#create_subset_files_ans()
+# count = 0
+# with open("Resources/Posts.xml") as f:
+#     for line in f:
+#         count += 1
+# print(count)
