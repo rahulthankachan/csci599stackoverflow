@@ -27,11 +27,11 @@ def countTrend(ipfile):
 # Compute the trend of the language based on the fraction of the posts
 # @args: a dictionary of trend counts: {language:count_list}
 # Return a dictionary of trend fractions: {language:fraction_list}
-def fractionTrend(questionTrends):
-    trendSum = [sum([questionTrends[l][i] for l in questionTrends]) for i in range(0,8*12)]
-    for l in questionTrends:
-        questionTrends[l] = [questionTrends[l][i]/trendSum[i] if trendSum[i]!=0 else 0 for i in range(0,8*12)]
-    return questionTrends
+def fractionTrend(postTrends):
+    trendSum = [sum([postTrends[l][i] for l in postTrends]) for i in range(0,8*12)]
+    for l in postTrends:
+        postTrends[l] = [postTrends[l][i]/trendSum[i] if trendSum[i]!=0 else 0 for i in range(0,8*12)]
+    return postTrends
 
 
 if __name__ == '__main__':
