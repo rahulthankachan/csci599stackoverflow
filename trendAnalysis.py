@@ -36,35 +36,34 @@ def fractionTrend(questionTrends):
 
 if __name__ == '__main__':
     popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
-'''
+    # Question Trend Analysis
     # Keep a dictionary of trends
     questionTrends = dict()
     # Count Trends
     for lang in popular_languages:
-        with open("Output/Trends/QuestionCount.txt", "a") as opfile:
-            trend = countTrend("Resources/Questions/"+lang+".txt")
-            opfile.write(lang+' '+str(trend)+'\n')
-            questionTrends.update({lang:trend})
-
+    with open("Output/Trends/QuestionCount.txt", "a") as opfile:
+    trend = countTrend("Resources/Questions/"+lang+".txt")
+    opfile.write(lang+' '+str(trend)+'\n')
+    questionTrends.update({lang:trend})
+    
     # Fraction Trends
     questionTrends = fractionTrend(questionTrends)
     with open("Output/Trends/QuestionFractions.txt", "a") as opfile:
-        for lang in questionTrends:
-            opfile.write(lang+' '+str(questionTrends[lang])+'\n')
-'''
+    for lang in questionTrends:
+    opfile.write(lang+' '+str(questionTrends[lang])+'\n')
+
+    # Answer Trend Analysis
     # Keep a dictionary of trends
     answerTrends = dict()
     # Count Trends
     for lang in popular_languages:
         with open("Output/Trends/AnswerCount.txt", "a") as opfile:
-            trend = countTrend("Resources/Answers/"+lang+".txt")
+            trend = countTrend("Resources/Answers/ans_"+lang+".txt")
             opfile.write(lang+' '+str(trend)+'\n')
             answerTrends.update({lang:trend})
 
     # Fraction Trends
     answerTrends = fractionTrend(answerTrends)
     with open("Output/Trends/AnswerFractions.txt", "a") as opfile:
-        for lang in questionTrends:
-            opfile.write(lang+' '+str(questionTrends[lang])+'\n')
-
-
+        for lang in answerTrends:
+            opfile.write(lang+' '+str(answerTrends[lang])+'\n')
