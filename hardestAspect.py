@@ -3,7 +3,7 @@
 # Class Project - What StackOverflow Tells about Programming Languages
 # Nada Aldarrab		naldarra@usc.edu
 # -------------------------------------------
-# To run this program, run this command: python3 trendAnalysis.py
+# To run this program, run this command: python3 hardestAspect.py
 # Follow the directory structure of the GIT repository
 # -------------------------------------------
 
@@ -36,7 +36,6 @@ def fractionTrend(questionTrends):
 
 if __name__ == '__main__':
     popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
-'''
     # Keep a dictionary of trends
     questionTrends = dict()
     # Count Trends
@@ -51,20 +50,3 @@ if __name__ == '__main__':
     with open("Output/Trends/QuestionFractions.txt", "a") as opfile:
         for lang in questionTrends:
             opfile.write(lang+' '+str(questionTrends[lang])+'\n')
-'''
-    # Keep a dictionary of trends
-    answerTrends = dict()
-    # Count Trends
-    for lang in popular_languages:
-        with open("Output/Trends/AnswerCount.txt", "a") as opfile:
-            trend = countTrend("Resources/Answers/"+lang+".txt")
-            opfile.write(lang+' '+str(trend)+'\n')
-            answerTrends.update({lang:trend})
-
-    # Fraction Trends
-    answerTrends = fractionTrend(answerTrends)
-    with open("Output/Trends/AnswerFractions.txt", "a") as opfile:
-        for lang in questionTrends:
-            opfile.write(lang+' '+str(questionTrends[lang])+'\n')
-
-
