@@ -136,8 +136,8 @@ def Calculate_Answerer_Per_Language_List():
 
             Number_of_Answers += 1
 
-        Data_Per_Language[item[0]]["QuestionsCount"] = Number_of_Answers
-        Data_Per_Language[item[0]]["QuestionerCount"] = len(tempAnswererList)
+        Data_Per_Language[item[0]]["AnswersCount"] = Number_of_Answers
+        Data_Per_Language[item[0]]["AnswerersCount"] = len(tempAnswererList)
         # Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
 
     print("Done")
