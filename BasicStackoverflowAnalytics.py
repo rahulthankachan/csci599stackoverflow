@@ -108,14 +108,45 @@ def Calculate_Questioner_Per_Language_List():
 
         Data_Per_Language[item[0]]["QuestionsCount"] = Number_of_questions
         Data_Per_Language[item[0]]["QuestionerCount"] = len(tempQuestionerList)
-        Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
+        # Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
         fp.close()
 
     print(Data_Per_Language)
 
 
+def Calculate_Answerer_Per_Language_List():
 
-Calculate_Questioner_Per_Language_List()
+    fp = open('Output/TopTenProgrammingLanguages_sorted_list.txt','r')
+    fo = open('Output/Question1_Answers.txt', 'w');
+    ProgrammingLanguages_list = eval(fp.read())
+    fp.close()
+
+    Data_Per_Language = dict()
+
+    for item in ProgrammingLanguages_list:
+        Number_of_Answers = 0
+        Data_Per_Language[item[0]] = dict()
+        fp = open('Resources/Answers/' + 'ans_' + item[0] +'.txt','r')
+        tempAnswererList = list()
+        for line in fp:
+            tempDict= eval(line.rstrip('\n'))
+            if tempDict['OwnerUserId']:
+                if int(tempDict['OwnerUserId']) not in tempAnswererList:
+                    tempAnswererList.append(int(tempDict['OwnerUserId']))
+
+            Number_of_Answers += 1
+
+        Data_Per_Language[item[0]]["QuestionsCount"] = Number_of_Answers
+        Data_Per_Language[item[0]]["QuestionerCount"] = len(tempAnswererList)
+        # Data_Per_Language[item[0]]["QuestionerList"] = tempQuestionerList
+
+    print("Done")
+    fo.write(str(Data_Per_Language))
+    fo.close()
+    fp.close()
+
+# Calculate_Questioner_Per_Language_List()
+Calculate_Answerer_Per_Language_List()
 
 
 
