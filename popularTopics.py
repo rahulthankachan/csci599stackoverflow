@@ -29,4 +29,5 @@ if __name__ == '__main__':
             tags = countTags("Resources/Questions/"+lang+".txt")
             # Sort the tag list in descending order of counts
             tags = sorted(tags.items(), key=lambda x:-x[1])
+            # Write top 30 topics discussed in each language
             opfile.write(lang+' '+str(tags[:30])+'\n')
