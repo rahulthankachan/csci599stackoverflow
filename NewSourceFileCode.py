@@ -175,12 +175,13 @@ def source_answers_weka():
 
 def source_questions_timestamps_weka():
 
-    count = 1
+    count = 0
 
     ques_ans_map = source_answers_weka()
 
 
     file1 = open("Resources/weka/Map_Questions_Weka.txt", 'a')
+    file2 = open('Resources/weka/alltags.txt', 'a')
     for event, elem in XMLParser.iterparse("Resources/Posts.xml"):
         if elem.get("PostTypeId") == '1':
 
@@ -200,10 +201,7 @@ def source_questions_timestamps_weka():
                 current_row_date = elem.get('CreationDate')
                 stored_current_row_date = datetime.strptime(current_row_date, "%Y-%m-%dT%H:%M:%S.%f")
 
-
-
-                if stored_timestamp > current_row_date:
-
+                if stored_date > stored_current_row_date:
                     d1_ts = time.mktime(stored_date.timetuple())
                     d2_ts = time.mktime(stored_current_row_date.timetuple())
                     time_elapsed = d1_ts - d2_ts
@@ -229,13 +227,19 @@ def source_questions_timestamps_weka():
 
                     tagnames = ''
                     for t in mdict:
-                        tagnames = t + '||'
+                        tagnames += t + '||'
+                        file2.write(t + '\n')  #writes all the tags in a sigle line
                     tagnames = tagnames[:-2]
-                ques_ans_map[int(elem.get('Id'))][1] = 1
-                # print(str(ques_ans_map[int(elem.get('Id'))]))
-                file1.write("%s %s %s %s %s %s" % (ques['qid'], tagnames, ques['time_elapsed'], ques['month_of_year'],
+
+                    ques_ans_map[int(elem.get('Id'))][1] = 1
+                    # print(str(ques_ans_map[int(elem.get('Id'))]))
+                    file1.write("%s %s %s %s %s %s" % (ques['qid'], tagnames, ques['time_elapsed'], ques['month_of_year'],
                                              ques['bodylength'], ques['taglength']
                                             ) + '\n')
+                else:
+                    print('This is a wierd error!')
+                    print(stored_date - stored_current_row_date)
+                    count += 1
 
         elem.clear()
 
@@ -250,7 +254,9 @@ def source_questions_timestamps_weka():
 
                 # count += 1
     print('Done')
+    print(count)
     file1.close()
+    file2.close()
 
 
 
