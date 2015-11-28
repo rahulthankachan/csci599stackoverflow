@@ -147,7 +147,7 @@ def source_answers_weka():
 
 
     questions = {}
-    file_name = "Map_Answers2.txt"
+    file_name = "Map_Answers.txt"
     count = 0
     with open("Resources/"+file_name, "r") as allQuestion:
         for line in allQuestion:
@@ -155,7 +155,7 @@ def source_answers_weka():
             ques = eval(line)
             if int(ques['qid']) in questions:
                 # questions[int(ques[0])] = ques[1]
-                stored_timestamp = questions[int(ques['qid'])]
+                stored_timestamp = questions[int(ques['qid'])][0]
                 stored_date = datetime.strptime(stored_timestamp, "%Y-%m-%dT%H:%M:%S.%f")
 
                 current_row_date = ques['CDate']
@@ -163,10 +163,10 @@ def source_answers_weka():
 
                 # print('Clash')
                 if stored_date > stored_current_row_date:
-                    questions[int(ques['qid'])] = current_row_date
+                    questions[int(ques['qid'])] = [current_row_date, 0]
 
             else:
-                questions[int(ques['qid'])] = ques['CDate']
+                questions[int(ques['qid'])] = [ques['CDate'], 0]
     print("Questions Returned")
     return questions
 
@@ -180,14 +180,21 @@ def source_questions_timestamps_weka():
     ques_ans_map = source_answers_weka()
 
 
-    file1 = open("Resources/Map_Questions.txt", 'a')
+    file1 = open("Resources/weka/Map_Questions_Weka.txt", 'a')
     for event, elem in XMLParser.iterparse("Resources/Posts.xml"):
         if elem.get("PostTypeId") == '1':
 
             ques = {}
+            tagnames = ''
+            mdict = []
 
             if int(elem.get('Id')) in ques_ans_map:
-                stored_timestamp = ques_ans_map[int(elem.get('Id'))]
+                if ques_ans_map[int(elem.get('Id'))][1] == 1:  ###To check if the questions repeats in posts.xml
+                     print('clash')
+                # else:
+                #     print('No- Clash')
+
+                stored_timestamp = ques_ans_map[int(elem.get('Id'))][0]
                 stored_date = datetime.strptime(stored_timestamp, "%Y-%m-%dT%H:%M:%S.%f")
 
                 current_row_date = elem.get('CreationDate')
@@ -219,20 +226,29 @@ def source_questions_timestamps_weka():
 
                     ques['month_of_year'] = 'month' + str(stored_current_row_date.month)
                     ques['bodylength'] = len(elem.get('Body'))
-                    print(str(ques))
+
+                    tagnames = ''
+                    for t in mdict:
+                        tagnames = t + '||'
+                    tagnames = tagnames[:-2]
+                ques_ans_map[int(elem.get('Id'))][1] = 1
+                # print(str(ques_ans_map[int(elem.get('Id'))]))
+                file1.write("%s %s %s %s %s %s" % (ques['qid'], tagnames, ques['time_elapsed'], ques['month_of_year'],
+                                             ques['bodylength'], ques['taglength']
+                                            ) + '\n')
+
+        elem.clear()
+
+                    # print(str(ques))
 
                 # qid / Question Tags / delta_answer / creation month / bodylength / taglength/
 
-                    if count > 10:
-                        break
-                else:
-                    print(elem.get('Tags'))
+                    # if count > 10:
+                    #     break
+                # else:
+                    # print(elem.get('Tags'))
 
-                count += 1
-
-            #file1.write(str(answer_dectionary) + '\n')
-        elem.clear()
-
+                # count += 1
     print('Done')
     file1.close()
 
