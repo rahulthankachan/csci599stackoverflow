@@ -1,2 +1,3 @@
 # csci599stackoverflow
-CSCI 599 - Project
+CSCI599  - Project
+Project Dwscription 
