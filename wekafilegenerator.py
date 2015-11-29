@@ -4,6 +4,8 @@ from datetime import datetime
 import time
 import os
 
+popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
+
 
 def get_attribute1():
     attr_str = 'javascript, java, c#, php, python, html, c++, sql, objective-c, c'
@@ -11,7 +13,7 @@ def get_attribute1():
 
 
 def get_attribute3():
-    attr_str = '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12'
+    attr_str = 'month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12'
     return '{' + attr_str + '}'
 
 # name of the Relation
@@ -64,7 +66,49 @@ weka_f.write('@attribute ' + attribute6_name + ' ' + attribute6 + '\n')
 weka_f.write('\n\n')
 weka_f.write('@data\n')
 
-#data file reader
+# data file reader
+# ORDER # 0 qid / 1 Question Tags / 2 delta_answer / 3 creation month / 4 bodylength / 5 taglength/    6---- decision
+count = 500000
+flag = 1
+with open('Resources/weka/Map_Questions_Weka.txt') as data_file:
+    for line in data_file:
+        elements = line.split(' ')
+        tags = elements[1].split('||')
+        for tag in tags:
+            if tag in popular_languages:
+
+                delta_answer = elements[2]
+                time_answer = ''
+
+                if float(delta_answer) < 4 * 60:
+                    time_answer = 'fastest'
+                elif float(delta_answer) < 11 * 60:
+                    time_answer = 'fast'
+                elif float(delta_answer) < 1 * 60 * 60:
+                    time_answer = 'neutral'
+                elif float(delta_answer) < 3 * 60 * 60:
+                    time_answer = 'slow'
+                else:
+                    time_answer = 'slowest'
+
+                data_str = tag + ' ' + str(delta_answer) + ' ' + str(elements[3]) + ' ' + str(elements[4]) + ' ' +\
+                           str(elements[5][:-1]) + ' ' + time_answer
+                weka_f.write(data_str + '\n')
+                count -= 1
+                if count < 0:
+                    flag = 0
+                    break
+        if flag == 0:
+            break
+
+
+
+
+
+
+
+
+
 
 
 
