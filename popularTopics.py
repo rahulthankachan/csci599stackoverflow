@@ -23,11 +23,15 @@ def countTags(ipfile):
 
 if __name__ == '__main__':
     popular_languages = ("javascript", "java", "c#", "php", "python", "html", "c++", "sql", "objective-c", "c")
+    with open("Output/ListProgrammingLanguagesFinal2.txt","r") as langList:
+        langList = eval(langList.read())
     # Count Tags
     for lang in popular_languages:
-        with open("Output/PopularTopics.txt", "a") as opfile:
+        with open("Output/PopularTopics-list.txt", "a") as opfile:
             tags = countTags("Resources/Questions/"+lang+".txt")
+            totalCount = tags[lang]
             # Sort the tag list in descending order of counts
             tags = sorted(tags.items(), key=lambda x:-x[1])
-            # Write top 30 topics discussed in each language
-            opfile.write(lang+' '+str(tags[:30])+'\n')
+            # Find top 10 topics discussed in each language, excluding other language tags
+            tags = [lang]+[tag for tag, count in tags if tag not in langList][:10]
+            opfile.write(str(tags)+'\n')
