@@ -101,7 +101,7 @@ chart1.add_series({
 })
 
 # Add a chart title and some axis labels.
-chart1.set_title ({'name': 'Duration Analysis'})
+#chart1.set_title ({'name': 'Duration Analysis'})
 chart1.set_x_axis({'name': 'Duration'})
 chart1.set_y_axis({'name': 'Question Fraction'})
 
